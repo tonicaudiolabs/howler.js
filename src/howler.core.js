@@ -558,9 +558,16 @@
 
       // If no sound has played after 30 seconds, suspend the context.
       self._suspendTimer = setTimeout(function () {
-        if (!self.autoSuspend) {
+        if (!self.autoSuspend ) {
           return;
         }
+
+				// Issue #1707: https://github.com/goldfire/howler.js/pull/1707/commits/f8dd3805a58c605f9e5ce1e04d3a3ab146103822
+				// Fixed the issue of music not playing in iOS 14.0 30s,
+				// and music can no longer be played after that·
+				if (self.ctx.state === "suspended") {
+					return;
+				}
 
         self._suspendTimer = null;
         self.state = "suspending";
